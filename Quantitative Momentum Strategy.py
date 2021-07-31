@@ -15,6 +15,7 @@ symbol = 'AAPL'
 api_url = f'https://sandbox.iexapis.com/stable/stock/{symbol}/stats?token={IEX_CLOUD_API_TOKEN}' #called f string
 data = requests.get(api_url).json()
 
+print('yeah')
 
 def chunks(lst, n):
     for i in range(0, len(lst), n):
