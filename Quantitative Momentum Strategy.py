@@ -4,7 +4,7 @@ import requests
 import math
 from scipy.stats import percentileofscore as score
 import xlsxwriter
-from secret import IEX_CLOUD_API_TOKEN
+from test import IEX_CLOUD_API_TOKEN
 from statistics import mean
 
 stocks = pd.read_csv('C:/Users/Praty/OneDrive/Programming/Algorithmic-Trading/sp_500_stocks.csv')
@@ -13,7 +13,7 @@ stocks = pd.read_csv('C:/Users/Praty/OneDrive/Programming/Algorithmic-Trading/sp
 #API Calls and Data Storage through Pandas DataFrames
 
 symbol = 'AAPL'
-api_url = f'https://sandbox.iexapis.com/stable/stock/{symbol}/stats?token={IEX_CLOUD_API_TOKEN}' #called f string
+api_url = f'https://sandbox.iexapis.com/stable/stock/{symbol}/stats?token={IEX_CLOUD_API_TOKEN}' #calls stats endpoint
 data = requests.get(api_url).json()
 
 def chunks(lst, n):
@@ -77,7 +77,7 @@ for i in range(0, len(final_dataframe)):
 
 print(final_dataframe)
 
-#Better Quantitative Momentum Strategy
+#Better Quantitative Momentum Strategy that utilizes multiple evaluation metrics
 
 hqm_columns = [
     'Ticker',

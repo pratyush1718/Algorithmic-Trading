@@ -82,7 +82,7 @@ symbol = 'AAPL'
 batch_api_call_url2 = f'https://sandbox.iexapis.com/stable/stock/market/batch/?types=advanced-stats,quote&symbols={symbol}&token={IEX_CLOUD_API_TOKEN}'
 data2 = requests.get(batch_api_call_url2).json()
 
-#Building a better quantitative strategy model
+#Building a better quantitative strategy model that utilizes multiple evaluation metrics
 
 #print(data2['AAPL']['advanced-stats'])  sample line for finding value metrics locations
 
@@ -180,6 +180,8 @@ metrics = {
     'EV/GP': 'EV/GP Percentile'
 }
 
+#Calculating percentile scores
+
 for metric in metrics.keys():
     for row in rv_dataframe.index:
         rv_dataframe.loc[row, metrics[metric]] = score(rv_dataframe[metric], rv_dataframe.loc[row, metric])/100
@@ -202,6 +204,8 @@ position_size = float(portfolio_size)/len(rv_dataframe)
 
 for row in rv_dataframe.index:
     rv_dataframe.loc[row, 'Number of Shares to Buy'] = math.floor(position_size/rv_dataframe.loc[row, 'Price'])
+
+#converting to excel output
 
 writer = pd.ExcelWriter('Quantitative Value Strategy.xlsx', engine='xlsxwriter')
 rv_dataframe.to_excel(writer, sheet_name = 'Quantitative Value Strategy', index=False)
