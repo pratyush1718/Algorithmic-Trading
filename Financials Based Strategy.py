@@ -187,7 +187,7 @@ integer_template = writer.book.add_format(
 
 float_template = writer.book.add_format(
     {
-        'num_format':'0',
+        'num_format':'0.000',
         'font_color': font_color,
         'bg_color': background_color,
         'border': 1
