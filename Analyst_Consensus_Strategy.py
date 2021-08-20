@@ -102,10 +102,11 @@ for row in acs_dataframe.index:
             acs_dataframe.loc[row, metric] = convertingFromNumToConsensusString(acs_dataframe.loc[row, metric])
 
 
+acs_forFinal = acs_dataframe.copy()
 acs_dataframe.sort_values('ACS Score', ascending = False, inplace = True)
 acs_dataframe.reset_index(drop=True, inplace = True)
-hfb_dataframe = acs_dataframe[:50]
-print(hfb_dataframe)
+acs_dataframe = acs_dataframe[:50]
+print(acs_dataframe)
 
 def portfolio_input():
     global portfolio_size
@@ -121,14 +122,14 @@ def portfolio_input():
             portfolio_size = input('Quit playin and just enter the total value of your portfolio: ')
 
 portfolio_input()
-position_size = float(portfolio_size)/len(hfb_dataframe)
+position_size = float(portfolio_size)/len(acs_dataframe)
 
 for row in acs_dataframe.index:
     acs_dataframe.loc[row, 'Number of Shares to Buy'] = math.floor(position_size/acs_dataframe.loc[row, 'Price'])
 
 #Converting to excel output
 writer = pd.ExcelWriter('Analyst Consensus Strategy.xlsx', engine='xlsxwriter')
-hfb_dataframe.to_excel(writer, sheet_name = 'Analyst Consensus Strategy', index=False)
+acs_dataframe.to_excel(writer, sheet_name = 'Analyst Consensus Strategy', index=False)
 
 
 background_color = '#0a0a23'

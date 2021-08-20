@@ -50,6 +50,8 @@ for symbol_string in symbol_strings:
         )
 #print(final_dataframe)
 
+
+
 final_dataframe.sort_values('Price-to-Earnings Ratio', ascending=True, inplace=True)
 final_dataframe = final_dataframe[final_dataframe['Price-to-Earnings Ratio'] > 0]
 final_dataframe = final_dataframe[:50]
@@ -194,10 +196,11 @@ for row in rv_dataframe.index:
         value_percentiles.append(rv_dataframe.loc[row, metrics[metric]])
     rv_dataframe.loc[row, 'RV Score'] = mean(value_percentiles)
 
+rv_forFinal = rv_dataframe.copy()
 rv_dataframe.sort_values('RV Score', ascending=True, inplace=True)
 rv_dataframe = rv_dataframe[rv_dataframe['Price-to-Earnings Ratio'] > 0]
-rv_dataframe = rv_dataframe[:50]
 rv_dataframe.reset_index(drop=True, inplace = True)
+rv_dataframe = rv_dataframe[:50]
 
 portfolio_input()
 position_size = float(portfolio_size)/len(rv_dataframe)

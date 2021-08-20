@@ -150,10 +150,10 @@ for row in hqm_dataframe.index:
     hqm_dataframe.loc[row, 'HQM Score'] = mean(momentum_percentiles)
 
 
-
+hqm_forFinal = hqm_dataframe.copy()
 hqm_dataframe.sort_values('HQM Score', ascending=False, inplace=True)
-hqm_dataframe = hqm_dataframe[:50]
 hqm_dataframe.reset_index(inplace=True, drop=True)
+hqm_dataframe = hqm_dataframe[:50]
 print(hqm_dataframe)
 
 portfolio_input()

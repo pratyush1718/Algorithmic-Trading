@@ -124,8 +124,11 @@ for row in hfb_dataframe.index:
         value_percentiles.append(hfb_dataframe.loc[row, metrics[metric]])
     hfb_dataframe.loc[row, 'HFB Score'] = mean(value_percentiles)
 
+
+
 hfb_dataframe = hfb_dataframe[hfb_dataframe['Total Assets/Total Liabilities'] > 1]
 hfb_dataframe = hfb_dataframe[hfb_dataframe['Total Cash+Cash Flow Financing'] > 0]
+hfb_forFinal = hfb_dataframe.copy()
 hfb_dataframe.sort_values('HFB Score', ascending = False, inplace = True)
 hfb_dataframe.reset_index(drop=True, inplace = True)
 hfb_dataframe = hfb_dataframe[:50]
