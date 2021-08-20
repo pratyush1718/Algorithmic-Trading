@@ -119,7 +119,7 @@ final_df.reset_index(drop=True, inplace = True)
 final_df = final_df[:50]
 print(final_df)
 
-#Calculating Number of Shares to buy for each Equity
+#Storing portfolio size from input
 
 def portfolio_input():
     global portfolio_size
