@@ -4,11 +4,11 @@ import requests
 import math
 from scipy.stats import percentileofscore as score
 import xlsxwriter
-from test import IEX_CLOUD_API_TOKEN
+from Secret import IEX_CLOUD_API_TOKEN, file_path
 from statistics import mean
 
 
-stocks = pd.read_csv('C:/Users/Praty/OneDrive/Programming/Algorithmic-Trading/sp_500_stocks.csv')
+stocks = pd.read_csv(file_path)
 
 
 #API Calls and Data Storage through Pandas DataFrames

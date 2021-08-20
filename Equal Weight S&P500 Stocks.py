@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import xlsxwriter
 import math
-from test import IEX_CLOUD_API_TOKEN
+from Secret import IEX_CLOUD_API_TOKEN
 
 stocks = pd.read_csv('C:\Python\sp_500_stocks.csv')
 print(stocks)

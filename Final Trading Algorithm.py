@@ -5,7 +5,7 @@ import requests
 import math
 from scipy.stats import percentileofscore as score
 import xlsxwriter
-from test import IEX_CLOUD_API_TOKEN
+from Secret import IEX_CLOUD_API_TOKEN, file_path
 from statistics import mean
 from Quantitative_Momentum_Strategy import hqm_forFinal
 from Quantitative_Value_Strategy import rv_forFinal
@@ -13,7 +13,7 @@ from Financials_Based_Strategy import hfb_forFinal
 from Analyst_Consensus_Strategy import acs_forFinal
 
 
-stocks = pd.read_csv('C:/Users/Praty/OneDrive/Programming/Algorithmic-Trading/sp_500_stocks.csv')
+stocks = pd.read_csv(file_path)
 
 #creating final dataFrame and appending data
 my_columns = ['Ticker',
