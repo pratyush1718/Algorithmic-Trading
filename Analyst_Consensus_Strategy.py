@@ -48,6 +48,7 @@ for symbol_string in symbol_strings:
         api_url = f'https://sandbox.iexapis.com/stable/time-series/CORE_ESTIMATES/{symbol}?token={IEX_CLOUD_API_TOKEN}'
         data = requests.get(api_url).json()
         if(data != []):
+            print(symbol)
             acs_dataframe = acs_dataframe.append(
                 pd.Series(
                     [

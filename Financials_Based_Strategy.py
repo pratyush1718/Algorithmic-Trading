@@ -37,6 +37,7 @@ for symbol_string in symbol_strings:
         if(data[symbol]['financials']):
             #if(data[symbol]['financials']['financials'][0]['totalCash'] - data[symbol]['financials']['financials'][0]['cashFlowFinancing'] < 0):
               #  print(data[symbol])
+
             final_dataframe = final_dataframe.append(
                 pd.Series(
                     [
@@ -47,6 +48,7 @@ for symbol_string in symbol_strings:
                     ], index = my_columns
                 ), ignore_index=True
             )
+
 final_dataframe.sort_values('Total Assets', ascending=False, inplace=True)
 final_dataframe = final_dataframe[:50]
 final_dataframe.reset_index(inplace=True, drop=True)

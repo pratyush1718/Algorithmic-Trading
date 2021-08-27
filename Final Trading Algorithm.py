@@ -11,6 +11,7 @@ from Quantitative_Momentum_Strategy import hqm_forFinal
 from Quantitative_Value_Strategy import rv_forFinal
 from Financials_Based_Strategy import hfb_forFinal
 from Analyst_Consensus_Strategy import acs_forFinal
+from Sentiment_Analysis_Strategy import sas_forFinal
 
 
 stocks = pd.read_csv(file_path)
@@ -23,10 +24,12 @@ my_columns = ['Ticker',
               'Algorithms Recommendation',
               'Recommended Target Price',
               'Recommended Stop Loss Price',
+              'Past One Week News Trend',
               'HQM Score',
               'RV Score',
               'HFB Score',
-              'ACS Score']
+              'ACS Score',
+              'SAS Score']
 
 final_df = pd.DataFrame(columns=my_columns)
 
@@ -45,8 +48,10 @@ for row in hqm_forFinal.index:
                 'N/A',
                 'N/A',
                 'N/A',
+                'N/A',
                 hqm_forFinal.loc[row, 'HQM Score'],
                 rv_forFinal.loc[row, 'RV Score'],
+                0,
                 0,
                 0
 
@@ -55,17 +60,19 @@ for row in hqm_forFinal.index:
         ), ignore_index=True
     )
 
-#appending HFB and ACS Scores seperately since HFB and ACS DataFrames contained missing data
+#appending HFB, ACS, and SAS Scores seperately since their DataFrames contain missing data
 
-for row in hfb_forFinal.index:
-    for row2 in final_df.index:
-        if(hfb_forFinal.loc[row, 'Ticker'] == final_df.loc[row2, 'Ticker']):
-            final_df.loc[row2, 'HFB Score'] = hfb_forFinal.loc[row, 'HFB Score']
-for row in acs_forFinal.index:
-    for row2 in final_df.index:
-        if(acs_forFinal.loc[row, 'Ticker'] == final_df.loc[row2, 'Ticker']):
-            final_df.loc[row2, 'ACS Score'] = acs_forFinal.loc[row, 'ACS Score']
+def appendOtherScores(scoreType, df):
+    for row in df.index:
+        for row2 in final_df.index:
+            if(df.loc[row, 'Ticker'] == final_df.loc[row2, 'Ticker']):
+                final_df.loc[row2, scoreType] = df.loc[row, scoreType]
+                if(scoreType == 'SAS Score'):
+                    final_df.loc[row2, 'Past One Week News Trend'] = df.loc[row, 'PastOneWeekNewsTrend']
 
+appendOtherScores('HFB Score', hfb_forFinal)
+appendOtherScores('ACS Score', acs_forFinal)
+appendOtherScores('SAS Score', sas_forFinal)
 
 
 def assignRating(AlgoScore):
@@ -84,7 +91,8 @@ metrics = {
     'A': 'HQM Score',
     'B': 'RV Score',
     'C': 'HFB Score',
-    'D': 'ACS Score'
+    'D': 'ACS Score',
+    'E': 'SAS Score'
 }
 
 #reccomendations dict will help calculate Stop Loss Price, Target Price, and Number of Shares to Buy
@@ -224,10 +232,12 @@ column_formats = {
     'E': ['Algorithms Recommendation', string_template],
     'F': ['Recommended Target Price', dollar_template],
     'G': ['Recommended Stop Loss Price', dollar_template],
-    'H': ['HQM Score', percent_template],
-    'I': ['RV Score', percent_template],
-    'J': ['HFB Score', percent_template],
-    'K': ['ACS Score', percent_template]
+    'H': ['Past One Week News Trend', string_template],
+    'I': ['HQM Score', percent_template],
+    'J': ['RV Score', percent_template],
+    'K': ['HFB Score', percent_template],
+    'L': ['ACS Score', percent_template],
+    'M': ['SAS Score', percent_template]
 
 }
 
