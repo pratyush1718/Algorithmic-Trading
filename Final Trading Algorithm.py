@@ -45,7 +45,7 @@ for row in hqm_forFinal.index:
 
                 hqm_forFinal.loc[row, 'Ticker'],
                 hqm_forFinal.loc[row, 'Price'],
-                'N/A',
+                0,
                 'N/A',
                 'N/A',
                 'N/A',
@@ -136,10 +136,11 @@ for row in final_df.index:
 
 final_df.sort_values('Final Algorithm Score', ascending = False, inplace = True)
 final_df.reset_index(drop=True, inplace = True)
-final_df = final_df[:50]
 final_df = final_df[final_df['Final Algorithm Score'] >= 0.5]
+final_df = final_df[:50]
 print(final_df)
 
+#storing 30-day stock forecasts
 for row in final_df.index:
     final_df.loc[row,'30-Day Stock Forecast'] = get30dayForecast(final_df.loc[row,'Ticker'])
 
@@ -182,8 +183,10 @@ for row in final_df.index:
         position_size = position_size/StrongBuyCount
     elif signal == 'Buy':
         position_size = position_size/BuyCount
-    else:
+    elif signal == 'Overweight':
         position_size = position_size/OverweightCount
+    else:
+        position_size = 0
 
     final_df.loc[row, 'Number of Shares to Buy'] = math.floor(position_size/final_df.loc[row, 'Current Price'])
 
