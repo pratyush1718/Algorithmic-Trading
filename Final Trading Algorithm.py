@@ -12,16 +12,18 @@ from Quantitative_Value_Strategy import rv_forFinal
 from Financials_Based_Strategy import hfb_forFinal
 from Analyst_Consensus_Strategy import acs_forFinal
 from Sentiment_Analysis_Strategy import sas_forFinal
+from ML_StockForecast import get30dayForecast
 
 
 stocks = pd.read_csv(file_path)
 
 #creating final dataFrame and appending data
 my_columns = ['Ticker',
-              'Price',
+              'Current Price',
               'Number of Shares to Buy',
               'Final Algorithm Score',
               'Algorithms Recommendation',
+              '30-Day Stock Forecast',
               'Recommended Target Price',
               'Recommended Stop Loss Price',
               'Past One Week News Trend',
@@ -49,6 +51,7 @@ for row in hqm_forFinal.index:
                 'N/A',
                 'N/A',
                 'N/A',
+                'N/A',
                 hqm_forFinal.loc[row, 'HQM Score'],
                 rv_forFinal.loc[row, 'RV Score'],
                 0,
@@ -70,19 +73,26 @@ def appendOtherScores(scoreType, df):
                 if(scoreType == 'SAS Score'):
                     final_df.loc[row2, 'Past One Week News Trend'] = df.loc[row, 'PastOneWeekNewsTrend']
 
+
 appendOtherScores('HFB Score', hfb_forFinal)
 appendOtherScores('ACS Score', acs_forFinal)
 appendOtherScores('SAS Score', sas_forFinal)
 
 
 def assignRating(AlgoScore):
-    if AlgoScore >= 0.71:
+    if AlgoScore >= 0.75:
         return 'Strong Buy'
 
     elif AlgoScore >= 0.65:
         return 'Buy'
 
-    return 'Overweight'
+    elif AlgoScore >= 0.5:
+        return 'Overweight'
+
+    elif AlgoScore >= 0.3:
+        return 'Sell'
+
+    return 'Strong Sell'
 
 #dictionaries for operation storage
 
@@ -99,7 +109,9 @@ metrics = {
 Recommendations = {
     'Strong Buy': {'targetPricePadding': 1.22, 'stopLossPricePadding': 0.9, 'portfolioAllocation': 0.45},
     'Buy': {'targetPricePadding': 1.18, 'stopLossPricePadding': 0.95, 'portfolioAllocation': 0.35},
-    'Overweight': {'targetPricePadding': 1.1, 'stopLossPricePadding': 0.98, 'portfolioAllocation': 0.2}
+    'Overweight': {'targetPricePadding': 1.1, 'stopLossPricePadding': 0.98, 'portfolioAllocation': 0.2},
+    'Sell': {'targetPricePadding': 1, 'stopLossPricePadding': 0.98, 'portfolioAllocation': 0},
+    'Strong Sell': {'targetPricePadding': 0.9, 'stopLossPricePadding': 0.98, 'portfolioAllocation': 0}
 }
 
 
@@ -114,10 +126,10 @@ for row in final_df.index:
     for row2 in acs_forFinal.index:
         if(acs_forFinal.loc[row2, 'Ticker'] == final_df.loc[row, 'Ticker']):
             if(final_df.loc[row,'Ticker'] == 'NVDA'): #check for NVDA stock since sanbox mode in IEX Cloud API provides inaccurate price target for NVDA
-                final_df.loc[row, 'Recommended Target Price'] = 0.7 * acs_forFinal.loc[row2, 'Target Price']
+                final_df.loc[row, 'Recommended Target Price'] = 0.5 * acs_forFinal.loc[row2, 'Target Price']
             else:
                 final_df.loc[row, 'Recommended Target Price'] = ((Recommendations[final_df.loc[row, 'Algorithms Recommendation']])['targetPricePadding']) * acs_forFinal.loc[row2, 'Target Price']
-    final_df.loc[row, 'Recommended Stop Loss Price'] = ((Recommendations[final_df.loc[row, 'Algorithms Recommendation']])['stopLossPricePadding']) * final_df.loc[row, 'Price']
+    final_df.loc[row, 'Recommended Stop Loss Price'] = ((Recommendations[final_df.loc[row, 'Algorithms Recommendation']])['stopLossPricePadding']) * final_df.loc[row, 'Current Price']
 
 #print(final_df)
 
@@ -125,7 +137,11 @@ for row in final_df.index:
 final_df.sort_values('Final Algorithm Score', ascending = False, inplace = True)
 final_df.reset_index(drop=True, inplace = True)
 final_df = final_df[:50]
+final_df = final_df[final_df['Final Algorithm Score'] >= 0.5]
 print(final_df)
+
+for row in final_df.index:
+    final_df.loc[row,'30-Day Stock Forecast'] = get30dayForecast(final_df.loc[row,'Ticker'])
 
 #Storing portfolio size from input
 
@@ -169,7 +185,7 @@ for row in final_df.index:
     else:
         position_size = position_size/OverweightCount
 
-    final_df.loc[row, 'Number of Shares to Buy'] = math.floor(position_size/final_df.loc[row, 'Price'])
+    final_df.loc[row, 'Number of Shares to Buy'] = math.floor(position_size/final_df.loc[row, 'Current Price'])
 
 #converting to excel output
 
@@ -226,24 +242,25 @@ percent_template = writer.book.add_format(
 
 column_formats = {
     'A': ['Ticker', string_template],
-    'B': ['Price', dollar_template],
+    'B': ['Current Price', dollar_template],
     'C': ['Number of Shares to Buy', integer_template],
     'D': ['Final Algorithm Score', percent_template],
     'E': ['Algorithms Recommendation', string_template],
-    'F': ['Recommended Target Price', dollar_template],
-    'G': ['Recommended Stop Loss Price', dollar_template],
-    'H': ['Past One Week News Trend', string_template],
-    'I': ['HQM Score', percent_template],
-    'J': ['RV Score', percent_template],
-    'K': ['HFB Score', percent_template],
-    'L': ['ACS Score', percent_template],
-    'M': ['SAS Score', percent_template]
+    'F': ['30-Day Stock Forecast', dollar_template],
+    'G': ['Recommended Target Price', float_template],
+    'H': ['Recommended Stop Loss Price', dollar_template],
+    'I': ['Past One Week News Trend', string_template],
+    'J': ['HQM Score', percent_template],
+    'K': ['RV Score', percent_template],
+    'L': ['HFB Score', percent_template],
+    'M': ['ACS Score', percent_template],
+    'N': ['SAS Score', percent_template]
 
 }
 
 
 for column in column_formats.keys():
-    writer.sheets['Final Stock Recommendations'].set_column(f'{column}:{column}', 30, column_formats[column][1])
+    writer.sheets['Final Stock Recommendations'].set_column(f'{column}:{column}', 35, column_formats[column][1])
     writer.sheets['Final Stock Recommendations'].write(f'{column}1', column_formats[column][0], column_formats[column][1])
 
 writer.save()

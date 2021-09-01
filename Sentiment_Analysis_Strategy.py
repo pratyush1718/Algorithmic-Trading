@@ -26,7 +26,6 @@ monthNames = {'Jan': '01',
               'Nov': '11',
               'Dec': '12'}
 
-
 lastWeekDate = date.today() - timedelta(days=8)
 lastWeekDate = lastWeekDate.strftime(format = '%m-%e-%y')
 
@@ -38,7 +37,7 @@ def convertDate(newsDate):
     newDate = num + newsDate[3:]
     return newDate
 
-
+#parsing through table-row tags on the finviz site and scraping article data for every stock for the past week
 for ticker in stocks['Ticker']:
     parsedData = []
     finviz_url = 'https://finviz.com/quote.ashx?t='
@@ -47,11 +46,11 @@ for ticker in stocks['Ticker']:
         req = Request(url=url,headers={'user-agent': 'my-app2'})
         response = urlopen(req)
         html = BeautifulSoup(response, 'html')
-        news_table = html.find(id='news-table')
+        news_table = html.find(id='news-table') #returns elements with id = news-table
         news_tables[ticker] = news_table
         for row in news_table.findAll('tr'):
             title = row.a.text #returns title of news article. .a. is done to get anchor tag
-            date_data = row.td.text.split(' ')
+            date_data = row.td.text.split(' ') #returns date of news article
 
             if len(date_data) == 1:
                 time = date_data[0]
@@ -66,12 +65,13 @@ for ticker in stocks['Ticker']:
 
         allNews[ticker] = parsedData
     except urllib.error.HTTPError:
-        print(ticker + ' not found')
+        print(ticker + ' not found') #for stocks not found on finviz
 
 
 my_columns = ['Ticker', 'Mean Sentimental Score', 'SAS Score', 'PastOneWeekNewsTrend']
 sas_dataframe = pd.DataFrame(columns=my_columns)
 
+#Running sentiment analysis on the titles of articles for every stock, calculating a mean compound score, and appending it to the dataframe
 for ticker, listNews in allNews.items():
     vader = SentimentIntensityAnalyzer()
     newsListCompoundScores = []
@@ -100,9 +100,11 @@ def trendReturn(compoundScore):
     elif compoundScore < -0.1: return 'Negative'
     return 'Neutral'
 
+#Calculating SAS score and assigning a news trend value
 for row in sas_dataframe.index:
     sas_dataframe.loc[row,'SAS Score'] = score(sas_dataframe['Mean Sentimental Score'], sas_dataframe.loc[row,'Mean Sentimental Score'])/100
     sas_dataframe.loc[row,'PastOneWeekNewsTrend'] = trendReturn(sas_dataframe.loc[row,'Mean Sentimental Score'])
+
 
 sas_dataframe.sort_values('SAS Score',ascending=False,inplace=True)
 sas_dataframe.reset_index(drop=True, inplace=True)
@@ -110,6 +112,7 @@ sas_forFinal = sas_dataframe.copy()
 sas_dataframe = sas_dataframe[:50]
 print(sas_dataframe)
 
+#converting to excel output
 writer = pd.ExcelWriter('Sentiment Analysis Strategy.xlsx', engine='xlsxwriter')
 sas_dataframe.to_excel(writer, sheet_name = 'Sentiment Analysis Strategy', index=False)
 
