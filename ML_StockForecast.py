@@ -70,23 +70,6 @@ def get30dayForecast(ticker):
         print(math.sqrt(mean_squared_error(y_test,test_predict))) #calculating RMSE for testing data(root mean sqaured error)
 
 
-        ### Plotting
-        # shift train predictions for plotting
-        # look_back=100
-        # trainPredictPlot = np.empty_like(df1)
-        # trainPredictPlot[:, :] = np.nan
-        # trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
-        # # shift test predictions for plotting
-        # testPredictPlot = np.empty_like(df1)
-        # testPredictPlot[:, :] = np.nan
-        # testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
-        # # plot baseline and predictions
-        # plt.plot(scaler.inverse_transform(df1))
-        # plt.plot(trainPredictPlot)
-        # plt.plot(testPredictPlot)
-        # plt.show()
-
-
         #previous 100 days closing price is necessary for forecast
         previous100Days = len(test_data) - 100
         x_input=test_data[previous100Days:].reshape(1,-1)
@@ -130,6 +113,7 @@ def get30dayForecast(ticker):
                 lst_output.extend(yhat.tolist())
                 i+=1
 
+        #Plotting
         # day_new=np.arange(1,101)
         # day_pred=np.arange(101,131)
         # plt.plot(day_new,scaler.inverse_transform(df1[(len(df1)-100):]))
@@ -139,7 +123,8 @@ def get30dayForecast(ticker):
         lst_output = scaler.inverse_transform(lst_output)
         print(lst_output)
         if(ticker == 'NVDA'):
-            return lst_output[-1] * 0.53 #conditional check for NVDA since it had a stock split, which the algorithm couldn't detect.
+            if(lst_output[-1] > 400):
+                return lst_output[-1] * 0.6 #handles NVDA exception since ML algorithm is inaccurate because of NVDA's stock split
         return lst_output[-1]
     except IndexError:
         return "Unavailable" #for stocks with insufficient data for forecast

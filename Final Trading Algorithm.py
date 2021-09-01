@@ -55,8 +55,8 @@ for row in hqm_forFinal.index:
                 hqm_forFinal.loc[row, 'HQM Score'],
                 rv_forFinal.loc[row, 'RV Score'],
                 0,
-                0,
-                0
+                50,
+
 
             ], index=my_columns
 
@@ -80,16 +80,16 @@ appendOtherScores('SAS Score', sas_forFinal)
 
 
 def assignRating(AlgoScore):
-    if AlgoScore >= 0.75:
+    if AlgoScore >= 0.65:
         return 'Strong Buy'
 
-    elif AlgoScore >= 0.65:
+    elif AlgoScore >= 0.55:
         return 'Buy'
 
-    elif AlgoScore >= 0.5:
+    elif AlgoScore >= 0.4:
         return 'Overweight'
 
-    elif AlgoScore >= 0.3:
+    elif AlgoScore >= 0.2:
         return 'Sell'
 
     return 'Strong Sell'
@@ -250,7 +250,7 @@ column_formats = {
     'D': ['Final Algorithm Score', percent_template],
     'E': ['Algorithms Recommendation', string_template],
     'F': ['30-Day Stock Forecast', dollar_template],
-    'G': ['Recommended Target Price', float_template],
+    'G': ['Recommended Target Price', dollar_template],
     'H': ['Recommended Stop Loss Price', dollar_template],
     'I': ['Past One Week News Trend', string_template],
     'J': ['HQM Score', percent_template],

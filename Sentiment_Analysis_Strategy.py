@@ -94,10 +94,15 @@ for ticker, listNews in allNews.items():
 
 
 def trendReturn(compoundScore):
-    if compoundScore >= 0.5: return 'Very Positive'
-    elif compoundScore > 0.1: return 'Positive'
-    elif compoundScore <= -0.5: return 'Very Negative'
-    elif compoundScore < -0.1: return 'Negative'
+    if compoundScore >= 0.5:
+        return 'Very Positive'
+    elif compoundScore > 0.1:
+        return 'Positive'
+    elif compoundScore <= -0.5:
+        return 'Very Negative'
+    elif compoundScore < -0.1:
+        return 'Negative'
+
     return 'Neutral'
 
 #Calculating SAS score and assigning a news trend value
