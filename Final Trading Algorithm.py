@@ -55,7 +55,8 @@ for row in hqm_forFinal.index:
                 hqm_forFinal.loc[row, 'HQM Score'],
                 rv_forFinal.loc[row, 'RV Score'],
                 0,
-                50,
+                0,
+                0.5
 
 
             ], index=my_columns
@@ -225,15 +226,6 @@ integer_template = writer.book.add_format(
     }
 )
 
-float_template = writer.book.add_format(
-    {
-        'num_format':'0.00',
-        'font_color': font_color,
-        'bg_color': background_color,
-        'border': 1
-    }
-)
-
 percent_template = writer.book.add_format(
     {
         'num_format':'0.0%',
@@ -263,7 +255,7 @@ column_formats = {
 
 
 for column in column_formats.keys():
-    writer.sheets['Final Stock Recommendations'].set_column(f'{column}:{column}', 35, column_formats[column][1])
+    writer.sheets['Final Stock Recommendations'].set_column(f'{column}:{column}', 30, column_formats[column][1])
     writer.sheets['Final Stock Recommendations'].write(f'{column}1', column_formats[column][0], column_formats[column][1])
 
 writer.save()

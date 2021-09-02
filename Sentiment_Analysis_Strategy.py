@@ -58,11 +58,11 @@ for ticker in stocks['Ticker']:
                 date = date_data[0]
                 time = date_data[1]
 
-            if convertDate(date)[3:5] <= lastWeekDate[3:5]:
+
+            if convertDate(date)[3:5] <= lastWeekDate[3:5] and convertDate(date)[0:2] <= lastWeekDate[0:2]:
                 break
 
             parsedData.append(title)
-
         allNews[ticker] = parsedData
     except urllib.error.HTTPError:
         print(ticker + ' not found') #for stocks not found on finviz

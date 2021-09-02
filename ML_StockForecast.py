@@ -123,8 +123,10 @@ def get30dayForecast(ticker):
         lst_output = scaler.inverse_transform(lst_output)
         print(lst_output)
         if(ticker == 'NVDA'):
-            if(lst_output[-1] > 400):
-                return lst_output[-1] * 0.6 #handles NVDA exception since ML algorithm is inaccurate because of NVDA's stock split
+            if(lst_output[-1] > 510):
+                return lst_output[-1] * 0.45 #handles NVDA exception since ML algorithm is inaccurate because of NVDA's stock split
+            elif lst_output[-1] > 300:
+                return lst_output * 0.65
         return lst_output[-1]
     except IndexError:
         return "Unavailable" #for stocks with insufficient data for forecast
