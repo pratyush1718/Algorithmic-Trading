@@ -7,7 +7,7 @@ based on various evaluation metrics including Quantitative Momentum, Quantitativ
 Key concepts used: Rest APIs, Data Analysis, Web Scraping (using BeautifulSoup), NLP, and Machine Learning with Stacked LSTM model.
 ## API References
 #### IEX Cloud API
-#### Get values for stock symbol from various endpoints
+Get values for stock symbol from various endpoints
 
 ```http
   GET /stock/{symbol}/quote/
@@ -22,7 +22,7 @@ Key concepts used: Rest APIs, Data Analysis, Web Scraping (using BeautifulSoup),
 
 
 #### TIINGO API
-#### Get close and open prices for stock symbol
+Get close and open prices for stock symbol
 
 ```http
   GET daily/<ticker>/prices
