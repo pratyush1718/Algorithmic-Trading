@@ -43,10 +43,15 @@ Key concepts used: Rest APIs, Data Analysis, Web Scraping (using BeautifulSoup),
         msiexec /i python<version>.msi
 
 ## Screenshots
-
+ 
 - Sample Stock Forecast Chart
-  ![Sample Stock Forecast Chart](https://sat02pap001files.storage.live.com/y4mBkr34kmpLQ6IHxZ78NX00ng8eKABHnSZLy_EzOPqPEa9CBtFOqAYMxfkSgHfYDlwCP3zfqVH6jVKOSqjNNDWyIMF-Xwv8A5YqoDUQZnST6jhAN3QVeU-CXL773isHQ_MNcG1LKHuu9YRxesyr4r4k46k-ztp1QEtmtd5uHOWQyqr9bT8hsm2FXQ60boKczvc?width=596&height=446&cropmode=none)
+   
+
+![Sample Stock Forecast Chart](https://sat02pap001files.storage.live.com/y4mBkr34kmpLQ6IHxZ78NX00ng8eKABHnSZLy_EzOPqPEa9CBtFOqAYMxfkSgHfYDlwCP3zfqVH6jVKOSqjNNDWyIMF-Xwv8A5YqoDUQZnST6jhAN3QVeU-CXL773isHQ_MNcG1LKHuu9YRxesyr4r4k46k-ztp1QEtmtd5uHOWQyqr9bT8hsm2FXQ60boKczvc?width=596&height=446&cropmode=none)
+
 - Sample Excel Output Snip
+  
+
   ![Sample Excel Output Snip](https://sat02pap001files.storage.live.com/y4mDUvpaJOE0BlSGjB4bD_lqQTiQnWccO35BuIGF9BF99y9B9CG4DabNX_NlbmHNFRPZEF4HF53zHTUtV8yvcBWpNdbAr2FURtNMTNGRkhRZcF-FM_kT4b74oOEDBxnq47NNeg2fP4GgRR6_oYaqIAByNsn2CBuMRODwNxmPHqDy3ak6Hd-uH-jHcYo0u54G0gc?width=1565&height=500&cropmode=none)
 
 ## Acknowledgements
